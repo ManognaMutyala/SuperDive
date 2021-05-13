@@ -81,9 +81,9 @@
                                     <tr th:each="note:${notes}">
                                         <td>
                                             <button type="button" class="btn btn-success"
-                                                    th:noteId = "${note.getNoteid()}"
-                                                    th:title = "${note.getTitle()}"
-                                                    th:description = "${note.getDescription()}"
+                                                    th:noteId = "${note.getNoteId()}"
+                                                    th:title = "${note.getNoteTitle()}"
+                                                    th:description = "${note.getNoteDescription()}"
                                                     th:onclick="javascript:showNoteModal(this.getAttribute('noteId'),
                                                     this.getAttribute('title'), this.getAttribute('description')
                                                     );">Edit</button>                                            <a class="btn btn-danger">Delete</a>

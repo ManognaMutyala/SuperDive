@@ -22,5 +22,5 @@ public interface NoteMapper {
     NoteForm getNoteById(Integer noteId);
 
     @Update("update notes set notetitle=#{notetitle}, notedescription=#{notedescription} where noteid=#{noteid} and userid=#{userid}")
-    void updateNotes(Integer noteId,String notetitle,String noteDescription,Integer userId);
+    void updateNotes(Integer noteid,String notetitle,String notedescription,Integer userid);
 }

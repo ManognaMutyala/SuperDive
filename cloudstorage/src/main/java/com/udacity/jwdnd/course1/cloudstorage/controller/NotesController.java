@@ -46,23 +46,30 @@ public class NotesController {
         int userId= signUpService.getUserId(authentication.getName());
         String notetitle=noteFields.getNoteTitle();
         String noteDescription=noteFields.getNoteDescription();
+
+        if(notesService.getNoteById(noteFields.getNoteId()) != null)
+        {
+            notesService.updateNotes(noteFields.getNoteId(), notetitle, noteDescription, userId);
+            model.addAttribute("notes",notesService.getAllNotes(userId));
+            model.addAttribute("fileList",storageService.getFiles(userId));
+            System.out.println("called service method");
+            return "home";
+        }
         notesService.insertNotes(notetitle,noteDescription,userId);
         model.addAttribute("notes",notesService.getAllNotes(userId));
         model.addAttribute("fileList",storageService.getFiles(userId));
         return "home";
     }
 
-    @PostMapping("/edit/{noteId}")
-    public String editNotes(@ModelAttribute("noteForm")NoteForm noteFields, @PathVariable("noteId") Integer noteId, Authentication authentication, Model model) {
-        System.out.println("Inside edit note controller");
-        int userId = signUpService.getUserId(authentication.getName());
-        String notetitle = noteFields.getNoteTitle();
-        String noteDescription = noteFields.getNoteDescription();
-        if (notesService.getNoteById(noteId) != null) {
-            notesService.updateNotes(noteId, notetitle, noteDescription, userId);
-            System.out.println("called service method");
-            return "home";
-        }
-        return "home";
-    }
+//    @PostMapping("/edit/{noteId}")
+//    public String editNotes(@ModelAttribute("noteForm")NoteForm noteFields, @PathVariable("noteId") Integer noteId, Authentication authentication, Model model) {
+//        System.out.println("Inside edit note controller");
+//        int userId = signUpService.getUserId(authentication.getName());
+//        String notetitle = noteFields.getNoteTitle();
+//        String noteDescription = noteFields.getNoteDescription();
+//        if (notesService.getNoteById(noteId) != null) {
+//
+//        }
+//        return "home";
+//    }
 }
