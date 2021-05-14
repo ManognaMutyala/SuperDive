@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
@@ -34,7 +35,7 @@ public class HomeController {
 
 
     @GetMapping()
-    public String home(Model model, @ModelAttribute("noteForm") NoteForm noteFields,Authentication authentication){
+    public String home(Model model, @ModelAttribute("noteForm") NoteForm noteFields, @ModelAttribute("CredentialsForm") CredentialsForm credentialsForm, Authentication authentication){
         String username=authentication.getName();
         int userid=signUpService.getUserId(username);
 

@@ -1,8 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Notes;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.SignUpService;
 import com.udacity.jwdnd.course1.cloudstorage.services.StorageService;
@@ -21,11 +23,13 @@ public class NotesController {
     private StorageService storageService;
     private SignUpService signUpService;
     private NotesService notesService;
+    private CredentialService credentialService;
 
-    public NotesController(StorageService storageService, SignUpService signUpService, NotesService notesService) {
+    public NotesController(StorageService storageService, SignUpService signUpService, NotesService notesService,CredentialService credentialService) {
         this.storageService = storageService;
         this.signUpService = signUpService;
         this.notesService = notesService;
+        this.credentialService=credentialService;
     }
 
     @GetMapping("/upload")
@@ -36,11 +40,12 @@ public class NotesController {
         int userId= signUpService.getUserId(authentication.getName());
         model.addAttribute("notes",notesService.getAllNotes(userId));
         model.addAttribute("fileList",storageService.getFiles(userId));
+        model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
         return "home";
     }
 
     @PostMapping("/upload")
-    public String uploadNotes(@ModelAttribute("noteForm") NoteForm noteFields, Authentication authentication, Model model)
+    public String uploadNotes(@ModelAttribute("noteForm") NoteForm noteFields, @ModelAttribute("CredentialsForm") CredentialsForm credentialsForm, Authentication authentication, Model model)
     {
         System.out.println("Inside upload notes post method");
         int userId= signUpService.getUserId(authentication.getName());
@@ -52,12 +57,14 @@ public class NotesController {
             notesService.updateNotes(noteFields.getNoteId(), notetitle, noteDescription, userId);
             model.addAttribute("notes",notesService.getAllNotes(userId));
             model.addAttribute("fileList",storageService.getFiles(userId));
+            model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
             System.out.println("called service method");
             return "home";
         }
         notesService.insertNotes(notetitle,noteDescription,userId);
         model.addAttribute("notes",notesService.getAllNotes(userId));
         model.addAttribute("fileList",storageService.getFiles(userId));
+        model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
         return "home";
     }
 
@@ -72,4 +79,18 @@ public class NotesController {
 //        }
 //        return "home";
 //    }
+
+    @GetMapping("/delete/{noteId}")
+    public String deleteNotes(@ModelAttribute("noteForm")NoteForm noteFields,@ModelAttribute("CredentialsForm") CredentialsForm credentialsForm,@PathVariable("noteId") Integer noteId,Authentication authentication,Model model){
+        int userId= signUpService.getUserId(authentication.getName());
+        if(notesService.getNoteById(noteFields.getNoteId()) != null)
+        {
+            notesService.deleteNoteById(noteFields.getNoteId());
+        }
+        model.addAttribute("notes",notesService.getAllNotes(userId));
+        model.addAttribute("fileList",storageService.getFiles(userId));
+        model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
+
+        return "home";
+    }
 }

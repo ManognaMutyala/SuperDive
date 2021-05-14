@@ -38,6 +38,11 @@ public class NotesService {
         noteMapper.updateNotes(noteId,notetitle,noteDescription,userId);
     }
 
+    public void deleteNoteById(Integer noteId)
+    {
+        noteMapper.deleteNoteById(noteId);
+    }
+
 
 
 }

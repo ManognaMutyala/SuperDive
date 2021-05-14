@@ -1,7 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
+import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.SignUpService;
 import com.udacity.jwdnd.course1.cloudstorage.services.StorageService;
@@ -33,15 +35,18 @@ public class FileController {
 
     private NotesService notesService;
 
+    private CredentialService credentialService;
 
-    public FileController(StorageService storageService, SignUpService signUpService,NotesService notesService) {
+
+    public FileController(StorageService storageService, SignUpService signUpService,NotesService notesService,CredentialService credentialService) {
         this.storageService = storageService;
         this.signUpService = signUpService;
         this.notesService=notesService;
+        this.credentialService=credentialService;
     }
 
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, Model model, Authentication authentication,@ModelAttribute("noteForm") NoteForm noteForm) throws IOException {
+    public String uploadFile(@RequestParam("fileUpload") MultipartFile multipartFile, Model model, Authentication authentication,@ModelAttribute("noteForm") NoteForm noteForm, @ModelAttribute("CredentialsForm") CredentialsForm credentialsForm) throws IOException {
         int userId=signUpService.getUserId(authentication.getName());
         if(storageService.getFileDetailsByName(multipartFile.getOriginalFilename())!=null) {
             model.addAttribute("uploadError",true);
@@ -51,6 +56,7 @@ public class FileController {
             files=storageService.getFiles(userId);
             model.addAttribute("fileList",files);
             model.addAttribute("notes",notesService.getAllNotes(userId));
+            model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
             return "home";
         }
         storageService.insert(multipartFile,userId);
@@ -59,6 +65,7 @@ public class FileController {
         files=storageService.getFiles(userId);
         model.addAttribute("fileList",files);
         model.addAttribute("notes",notesService.getAllNotes(userId));
+        model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
 
         return "home";
     }
