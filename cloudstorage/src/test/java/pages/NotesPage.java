@@ -39,7 +39,6 @@ public class NotesPage {
 
 
     public NotesPage(WebDriver driver) {
-        wait = new WebDriverWait(driver, 4, 5000);
         jE = (JavascriptExecutor) driver;
         PageFactory.initElements(driver, this);
     }

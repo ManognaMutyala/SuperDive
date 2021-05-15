@@ -42,10 +42,8 @@ public class CredentialsPage {
 
 
     private JavascriptExecutor jE;
-    private Wait wait;
 
     public CredentialsPage(WebDriver driver){
-        wait= new WebDriverWait(driver,2,5000);
         jE=(JavascriptExecutor)driver;
         PageFactory.initElements(driver, this);
     }
