@@ -30,9 +30,9 @@ public class CredentialService {
         byte[] key = new byte[16];
         random.nextBytes(key);
         String encodedKey = Base64.getEncoder().encodeToString(key);
-        System.out.println("password is" + credentials.getPassword());
+      //  System.out.println("password is" + credentials.getPassword());
         String encryptedPassword = encryptionService.encryptValue(credentials.getPassword(), encodedKey);
-        System.out.println("encrypted password is" + encryptedPassword);
+       // System.out.println("encrypted password is" + encryptedPassword);
         return credentialMapper.insert(new Credentials(userid, credentials.getCredentialurl(), credentials.getUsername(), encodedKey, encryptedPassword, null));
     }
 
@@ -42,8 +42,8 @@ public class CredentialService {
         for (Credentials credentials : credentialsList) {
             credentials.setEncpassword(credentials.getPassword());
             credentials.setPassword(encryptionService.decryptValue(credentials.getPassword(), credentials.getKey()));
-            System.out.println("encrypted password is in service class" + credentials.getEncpassword());
-            System.out.println("password is is in service class " + credentials.getPassword());
+         //   System.out.println("encrypted password is in service class" + credentials.getEncpassword());
+           // System.out.println("password is is in service class " + credentials.getPassword());
 
         }
         return credentialsList;

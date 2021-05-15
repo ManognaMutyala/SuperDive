@@ -19,7 +19,7 @@ public class NotesService {
     public void insertNotes(String notetitle,String notedescription,int userid)
     {
         noteMapper.insertNotes(new Notes(null,notetitle,notedescription,userid));
-        System.out.println("note inserted successfully");
+      //  System.out.println("note inserted successfully");
     }
 
     public List<NoteForm> getAllNotes(Integer userid)

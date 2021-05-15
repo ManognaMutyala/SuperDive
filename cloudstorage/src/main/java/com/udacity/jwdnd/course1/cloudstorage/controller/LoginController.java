@@ -22,7 +22,7 @@ public class LoginController {
     public String login()
     {
 
-        System.out.println("inside login controller");
+      //  System.out.println("inside login controller");
         return "login";
     }
 

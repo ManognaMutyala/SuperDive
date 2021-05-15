@@ -29,8 +29,8 @@ public class SignUpController {
 
     @PostMapping
     public String signUpUser(@ModelAttribute User user, Model model) {
-        System.out.println("Inside Post Mapping");
-        System.out.println("Username is "+ user.getUsername());
+      //  System.out.println("Inside Post Mapping");
+       // System.out.println("Username is "+ user.getUsername());
         String signuperror = null;
 
         if (!signUpService.isUserNameAvailable(user.getUsername())) {

@@ -19,7 +19,7 @@ public class SignUpPage {
     @FindBy(id="inputPassword")
     private WebElement passwordField;
 
-    @FindBy(id="submit")
+    @FindBy(id="submit-btn")
     private WebElement submitField;
 
 
@@ -27,7 +27,7 @@ public class SignUpPage {
         PageFactory.initElements(driver, this);
     }
 
-    private void signup(String firstname,String lastname,String username,String password)
+    public void signup(String firstname, String lastname, String username, String password)
     {
         this.firstNamefield.sendKeys(firstname);
         this.lastNamefield.sendKeys(lastname);

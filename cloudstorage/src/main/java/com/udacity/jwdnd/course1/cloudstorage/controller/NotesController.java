@@ -36,7 +36,7 @@ public class NotesController {
     public String getNotes(Authentication authentication, Model model)
     {
 
-        System.out.println("Inside get notes controller");
+      //  System.out.println("Inside get notes controller");
         int userId= signUpService.getUserId(authentication.getName());
         model.addAttribute("notes",notesService.getAllNotes(userId));
         model.addAttribute("fileList",storageService.getFiles(userId));
@@ -47,7 +47,7 @@ public class NotesController {
     @PostMapping("/upload")
     public String uploadNotes(@ModelAttribute("noteForm") NoteForm noteFields, @ModelAttribute("CredentialsForm") CredentialsForm credentialsForm, Authentication authentication, Model model)
     {
-        System.out.println("Inside upload notes post method");
+      //  System.out.println("Inside upload notes post method");
         int userId= signUpService.getUserId(authentication.getName());
         String notetitle=noteFields.getNoteTitle();
         String noteDescription=noteFields.getNoteDescription();
@@ -58,7 +58,7 @@ public class NotesController {
             model.addAttribute("notes",notesService.getAllNotes(userId));
             model.addAttribute("fileList",storageService.getFiles(userId));
             model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
-            System.out.println("called service method");
+          //  System.out.println("called service method");
             return "home";
         }
         notesService.insertNotes(notetitle,noteDescription,userId);
