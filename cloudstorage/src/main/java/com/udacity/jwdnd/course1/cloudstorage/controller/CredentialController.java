@@ -29,7 +29,6 @@ public class CredentialController {
     public String addCredentials(Model model, Authentication authentication, @ModelAttribute("noteForm") NoteForm noteFields, @ModelAttribute("CredentialsForm") CredentialsForm credentialsForm)
     {
         int userId= signUpService.getUserId(authentication.getName());
-      //  if(credentialService.isExists(userId,credentialsForm.getCredentialId())==null)
         if(credentialsForm.getCredentialId()==null)
         {
             credentialService.insert(credentialsForm,userId);
@@ -48,8 +47,6 @@ public class CredentialController {
     public String getCredentials(Model model, Authentication authentication, @ModelAttribute("noteForm") NoteForm noteFields, @ModelAttribute("CredentialsForm") CredentialsForm credentialsForm)
     {
         int userId= signUpService.getUserId(authentication.getName());
-        //  if(credentialService.isExists(userId,credentialsForm.getCredentialId())==null)
-
         model.addAttribute("notes",notesService.getAllNotes(userId));
         model.addAttribute("fileList",storageService.getFiles(userId));
         model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
@@ -66,7 +63,6 @@ public class CredentialController {
         model.addAttribute("notes",notesService.getAllNotes(userId));
         model.addAttribute("fileList",storageService.getFiles(userId));
         model.addAttribute("credentialslist",credentialService.getAllCredentials(userId));
-
         return "home";
     }
 

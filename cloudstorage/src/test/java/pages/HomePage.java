@@ -6,15 +6,14 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class HomePage {
-    @FindBy(id="logout-btn")
+    @FindBy(id = "logout-btn")
     WebElement logoutBtn;
 
     public HomePage(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
-    public void logout()
-    {
+    public void logout() {
         this.logoutBtn.click();
     }
 }

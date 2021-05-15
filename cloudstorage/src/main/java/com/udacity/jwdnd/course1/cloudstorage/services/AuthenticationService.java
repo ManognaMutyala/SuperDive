@@ -29,21 +29,16 @@ public class AuthenticationService implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username=authentication.getName();
         String password=authentication.getCredentials().toString();
-      //  System.out.println("Inside authentication service");
         User user=userMapper.getUserDetails(username);
         if(user!=null)
         {
             String encodedSalt=user.getSalt();
             String hashedPassword=hashService.getHashedValue(password,encodedSalt);
-         //   System.out.println("user entered password is "+ hashedPassword);
-          //  System.out.println("password in db "+user.getPassword());
             if(user.getPassword().equals(hashedPassword)){
-            //    System.out.println("password matched");
                 return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
 
             }
         }
-      //  System.out.println("passwords didnt match");
         return null;
     }
 
