@@ -5,12 +5,11 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
-import pages.HomePage;
-import pages.LoginPage;
-import pages.NotesPage;
-import pages.SignUpPage;
+import pages.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +26,7 @@ class CloudStorageApplicationTests {
 	private LoginPage loginPage;
 	private HomePage homePage;
 	private NotesPage notesPage;
+	private CredentialsPage credentialsPage;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -42,6 +42,7 @@ class CloudStorageApplicationTests {
 	@AfterEach
 	public void afterEach() {
 		if (this.driver != null) {
+
 			driver.quit();
 		}
 	}
@@ -60,6 +61,7 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL+"/signup");
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		Assertions.assertEquals("Sign Up",driver.getTitle());
+
 
 	}
 
@@ -83,7 +85,6 @@ class CloudStorageApplicationTests {
 		String lastname="test";
 		driver.get(baseURL+"/signup");
 		signUpPage=new SignUpPage(driver);
-
 		signUpPage.signup(firstname,lastname,username,password);
 		driver.get(baseURL + "/login");
 		loginPage=new LoginPage(driver);
@@ -95,6 +96,7 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Login",driver.getTitle());
 	}
 
+	//Test to check if notes is added and if it can be viewed,and  delete notes
 	@Test
 	public  void AddNotesIntegrationTest() throws InterruptedException {
 		String username="test";
@@ -103,9 +105,9 @@ class CloudStorageApplicationTests {
 		String lastname="test";
 		String noteTitle="noteTitleTest";
 		String noteDescription="note description";
+		WebDriverWait wait = new WebDriverWait(driver, 20);
 		driver.get(baseURL+"/signup");
 		signUpPage=new SignUpPage(driver);
-
 		signUpPage.signup(firstname,lastname,username,password);
 		driver.get(baseURL + "/login");
 		loginPage=new LoginPage(driver);
@@ -114,15 +116,98 @@ class CloudStorageApplicationTests {
 		homePage=new HomePage(driver);
 		Assertions.assertEquals("Home",driver.getTitle());
 		notesPage=new NotesPage(driver);
-		//notesPage.navNotesTab();
 		driver.findElement(By.id("nav-notes-tab")).click();
-		//Thread.sleep(50000);
-	//	Assertions.assertEquals("add-note-btn",driver.findElement(By.id("add-note-btn")).getText());
 		notesPage.addNewNote(noteTitle,noteDescription);
-
-
+		notesPage.navNotesTab();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("editNoteBtn"))).click();
+		Assertions.assertEquals(noteTitle,notesPage.getNoteTitle());
+	//	wait.until(ExpectedConditions.elementToBeClickable(By.id("editNoteBtn"))).click();
+		notesPage.deleteNote();
+		homePage.logout();
 
 	}
 
+	//Test to edit the notes and delete notes
+	@Test
+	public void editNotesTest() throws InterruptedException {
+		String username="test";
+		String password="test";
+		String firstname="test";
+		String lastname="test";
+		String noteTitle="noteTitleTest";
+		String noteDescription="note description";
+		String editTitle="NewTitle";
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+		driver.get(baseURL+"/signup");
+		signUpPage=new SignUpPage(driver);
+		signUpPage.signup(firstname,lastname,username,password);
+		driver.get(baseURL + "/login");
+		loginPage=new LoginPage(driver);
+		loginPage.login(username,password);
+		driver.get(baseURL+"/home");
+		homePage=new HomePage(driver);
+		notesPage=new NotesPage(driver);
+		driver.findElement(By.id("nav-notes-tab")).click();
+		notesPage.addNewNote(noteTitle,noteDescription);
+		notesPage.navNotesTab();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("editNoteBtn"))).click();
+		notesPage.editNote(editTitle);
+		notesPage.navNotesTab();
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("editNoteBtn"))).click();
+		Assertions.assertEquals(editTitle,notesPage.getNoteTitle());
+		notesPage.deleteNote();
+	}
+
+	//Test to add credentials and check if it is present, also check if password is encrypted
+	@Test
+	public void addCredTest() throws InterruptedException {
+		String username="test";
+		String password="test";
+		String firstname="test";
+		String lastname="test";
+		String credentialUrl="dummy.com";
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+		driver.get(baseURL+"/signup");
+		signUpPage=new SignUpPage(driver);
+		signUpPage.signup(firstname,lastname,username,password);
+		driver.get(baseURL + "/login");
+		loginPage=new LoginPage(driver);
+		loginPage.login(username,password);
+		driver.get(baseURL+"/home");
+		homePage=new HomePage(driver);
+		credentialsPage=new CredentialsPage(driver);
+		credentialsPage.addCredentials(credentialUrl,username,password);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("edit-cred-btn"))).click();
+		Assertions.assertEquals(credentialUrl,credentialsPage.getCredentials());
+		Assertions.assertNotEquals(password,credentialsPage.getCredPassword());
+		credentialsPage.deleteCredentials();
+	}
+
+	//Test to edit existing credentials
+	@Test
+	public void editCredTest() throws InterruptedException {
+		String username="test";
+		String password="test";
+		String firstname="test";
+		String lastname="test";
+		String credentialUrl="dummy.com";
+		String newUrl="dummydummy.com";
+		WebDriverWait wait = new WebDriverWait(driver, 20);
+		driver.get(baseURL+"/signup");
+		signUpPage=new SignUpPage(driver);
+		signUpPage.signup(firstname,lastname,username,password);
+		driver.get(baseURL + "/login");
+		loginPage=new LoginPage(driver);
+		loginPage.login(username,password);
+		driver.get(baseURL+"/home");
+		homePage=new HomePage(driver);
+		credentialsPage=new CredentialsPage(driver);
+		credentialsPage.addCredentials(credentialUrl,username,password);
+		wait.until(ExpectedConditions.elementToBeClickable(By.id("edit-cred-btn"))).click();
+		credentialsPage.editCredUrl(newUrl);
+		Assertions.assertEquals(password,credentialsPage.getPasswordFieldInModel());
+		credentialsPage.saveCredChanges();
+		credentialsPage.deleteCredentials();
+	}
 
 }
