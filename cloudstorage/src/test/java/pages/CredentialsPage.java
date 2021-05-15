@@ -72,7 +72,7 @@ public class CredentialsPage {
         jE.executeScript("arguments[0].click();",saveCredBtn);
         jE.executeScript("arguments[0].click();",navCredentialsTab);
     }
-
+ //  Reference: https://knowledge.udacity.com/questions/434707
     public String getPasswordFieldInModel(){
           return this.credPasswordField.getAttribute("value");
     }
